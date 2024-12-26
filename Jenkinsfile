@@ -28,11 +28,11 @@ pipeline {
             steps {
                 bat '''
                 set PATH=%PYTHON_PATH%;%PATH%
-                sonar-scanner.bat 
-                -D"sonar.projectKey=sonar_pipeline_jenkins" 
-                -D"sonar.sources=." 
-                -D"sonar.host.url=http://localhost:9000" 
-                -D"sonar.token=%SONAR_TOKEN%"
+               sonar-scanner.bat 
+               -D"sonar.projectKey=sonar_pipeline_jenkins" 
+               -D"sonar.sources=." 
+               -D"sonar.host.url=http://localhost:9000" 
+               -D"sonar.token=sqp_8e5d48752c7e32c8336fa25995cd3e752f21b28a"
                 '''
             }
         }
