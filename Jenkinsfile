@@ -16,7 +16,7 @@ node {
         echo 'Deploying the project...'
           
     }
-  if(currentBuild.result=='SUCCESS')
+  if(currentBuild.currentResult=='SUCCESS')
 {
   echo 'looks good'
 }
