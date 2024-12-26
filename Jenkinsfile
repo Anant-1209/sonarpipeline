@@ -1,26 +1,47 @@
-node {
-    stage('Checkout') {
-        echo ''  
-    }
+pipeline{
+  agent any
+  environment{
+    PYTHON_PATH='C:\Users\My PC\AppData\Local\Programs\Python\Python313;C:\Users\My PC\AppData\Local\Programs\Python\Python313\Scripts'
     
-    stage('Build') {
-        echo ''  
+  }
+  stages{
+    stage('Checkout'){
+      steps{
+        checkout scm
+      }
     }
-    
-    stage('Test') {
-        echo 'Running tests...'
-          
+  }
+  stage('Build'){
+  steps{
+    bat '''
+    set PATH=%PYTHON_PATH%;%PATH%
+    pip install -r requirements.txt
+
+    '''
+  }
+  }
+  stage('SonarAnalysis'){
+    environment{
+      SONAR_TOKEN=credentials('sqa_c78048dd75096cd8baa2e583466a98c36706cf60')
     }
-    
-    stage('Deploy') {
-        echo 'Deploying the project...'
-          
+    steps{
+      bat '''
+      set PATH=%PYTHON_PATH%;%PATH%
+      sonar-scanner.bat 
+      -D"sonar.projectKey=sonar_pipeline_jenkins" 
+      D"sonar.sources=." 
+      -D"sonar.host.url=http://localhost:9000" 
+      -D"sonar.token=%SONAR_TOKEN%"
+      '''
     }
-  if(currentBuild.currentResult=='SUCCESS')
-{
-  echo 'looks good'
+  }
+  
 }
-  else{
+post{
+  success{
+    echo 'went well and good'
+  }
+  failure{
     echo 'failed'
   }
 }
